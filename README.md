@@ -1,5 +1,12 @@
-# Snaprime dev. task
+# Snaprime Take-home
 
+A vertical slice of the Snaprime workflow:
+
+**URL → Website Extraction → Brand Profile → AI Ads → Editable Preview**
+
+## Approach
+
+The application extracts website content using Browserless (Playwright) to support JavaScript-rendered pages, parses the rendered HTML with Cheerio, and sends the extracted content to an LLM to generate a structured Brand Profile and three ads. Users can edit ads, save changes to Cloudflare D1, and regenerate individual ads without affecting the others.
 
 ## Stack
 
@@ -14,61 +21,28 @@
 
 ## Features
 
-- Extracts website content from any URL
+- Generic website extraction (no hardcoded selectors)
 - Supports JavaScript-rendered websites
-- Generates a structured Brand Profile
-- Generates 3 AI ads
-- Editable ad preview
+- AI-generated Brand Profile
+- Generates three ads
+- Editable preview
 - Save edits to Cloudflare D1
-- Regenerate a single ad without affecting the others
-- Graceful handling of extraction and AI failures
-- Displays extraction latency
-
-## Run locally
-
-Install dependencies:
-
-```bash
-pnpm install
-```
-
-Start the development server:
-
-```bash
-pnpm dev
-```
-
-## Environment Variables
-
-```env
-BROWSERLESS_TOKEN=
-OPENAI_API_KEY=
-```
-
-## Database
-
-Generate migrations:
-
-```bash
-pnpm db:generate
-```
-
-Apply migrations:
-
-```bash
-pnpm db:local
-pnpm db:remote
-```
-
-## Deploy
-
-```bash
-pnpm deploy
-```
+- Regenerate a single ad
+- Graceful error handling
+- Extraction latency reporting
 
 ## AI Usage
 
+I used ChatGPT during development for implementation support, architecture discussions, debugging, and prompt refinement. The application itself uses **OpenAI GPT-4.1 mini** for Brand Profile and ad generation.
+
 All AI-generated suggestions were reviewed, adapted, and integrated manually.
+
+## Key Decisions
+
+- Used Browserless to reliably support JavaScript-rendered pages.
+- Stored Brand Profile and generated ads directly in D1 as JSON for simplicity.
+- Implemented single-ad regeneration to preserve user edits to other ads.
+- Preferred a simple end-to-end implementation over additional infrastructure.
 
 ## Deferred
 
@@ -80,6 +54,26 @@ Given the suggested time budget, I intentionally deferred:
 - SSRF protection
 - AI retry/fallback strategy
 - UI polishing
+
+## Run locally
+
+```bash
+pnpm install
+pnpm dev
+```
+
+## Environment Variables
+
+```env
+BROWSERLESS_TOKEN=
+OPENAI_API_KEY=
+```
+
+## Deploy
+
+```bash
+pnpm deploy
+```
 
 ## Live Demo
 
