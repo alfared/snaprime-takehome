@@ -19,6 +19,7 @@
 	},
 	"dependencies": {
 		"@cloudflare/vite-plugin": "^1.26.0",
+		"@google/genai": "^2.10.0",
 		"@tailwindcss/vite": "^4.1.18",
 		"@tanstack/react-devtools": "latest",
 		"@tanstack/react-router": "latest",
