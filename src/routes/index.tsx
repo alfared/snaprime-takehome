@@ -24,7 +24,28 @@ function BrandProfileCard({
 }: {
   brandProfile: BrandProfile;
 }) {
+  return (
+    <section
+      style={{
+        border: "1px solid #ddd",
+        borderRadius: 12,
+        padding: 25,
+        marginBottom: 25,
+      }}
+    >
+      <h2>Brand Profile</h2>
 
+      <p><strong>What they do:</strong> {brandProfile.whatClientDoes}</p>
+      <p><strong>Audience</strong> {brandProfile.targetAudience}</p>
+      <p><strong>Tone:</strong> {brandProfile.toneVoice}</p>
+
+      {brandProfile.warnings?.length > 0 && (
+        <p>
+          <strong>Warnings:</strong> {brandProfile.warnings.join(", ")}
+        </p>
+      )}
+    </section>
+  );
 }
 
 function AdCard({
