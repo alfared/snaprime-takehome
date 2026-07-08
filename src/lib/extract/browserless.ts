@@ -1,34 +1,27 @@
-import * as cheerio from "cheerio";
 import { parseHtml } from "./parser"
 
-export async function extractWithBrowserless(
-  url: string,
-  token: string,
-){
-    const response = await fetch(
-        `https://chrome.browserless.io/content?token=${token}`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                url,
-                gotoOptions: {
-                    waitUntil: "networkidle2",
-                    timeout: 16000,
-                },
-            }),
-        },
-    );
+export async function extractWithBrowserless(url: string, token: string) {
+  const response = await fetch(
+    `https://production-sfo.browserless.io/content?token=${token}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url,
+        waitForTimeout: 3000,
+      }),
+    },
+  );
 
-    if (!response.ok) {
-        throw new Error("Failed to render page");
-    }
+  const html = await response.text();
 
-    const html = await response.text();
+  if (!response.ok) {
+    throw new Error(`Browserless ${response.status}: ${html.slice(0, 300)}`);
+  }
 
-    return parseHtml(url, html);
+  return parseHtml(url, html);
 }
 
 export async function extractWebsite(url: string, token: string) {
