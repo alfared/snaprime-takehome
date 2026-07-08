@@ -1,14 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { extractUrl } from "../server/extract.functions";
+import type { Ad, BrandProfile } from "../lib/db/schema";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
+type ProjectResult ={
+  id: string;
+  inputUrl: string;
+  status: string;
+  error: string | null;
+  extractedText: string;
+  images: string[];
+  brandProfile: BrandProfile | null;
+  ads: Ad[];
+  latencyMs: number;
+};
+
 function HomePage() {
   const [url, setUrl] = useState("");
   const [result, setResult] = useState<any>(null);
+  const [ads, setAds] = useState<Ad[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,6 +31,7 @@ function HomePage() {
     setIsLoading(true);
     setError("");
     setResult(null);
+    setAds([]);
 
     try {
       const data = await extractUrl({ data: { url } });
