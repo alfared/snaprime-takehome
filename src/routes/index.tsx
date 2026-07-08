@@ -1,14 +1,22 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { extractUrl } from "../server/extract.functions";
 
-export const Route = createFileRoute('/')({ component: Home })
+export const Route = createFileRoute("/")({
+  component: HomePage,
+});
 
-function Home() {
-  return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-    </div>
-  )
+function HomePage() {
+  const [url, setUrl] = useState("");
+  const [result, setResult] = useState<any>(null);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleCreate() {
+
+  }
+
+  return(
+    <main></main>
+  );
 }
