@@ -14,9 +14,21 @@ function HomePage() {
 
   async function handleCreate() {
 
+    setIsLoading(true);
+    setError("");
+    setResult(null);
+
+    try {
+      const data = await extractUrl({ data: { url } });
+      setResult(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return(
-    <main></main>
+    <main style={{ maxWidth: 900, margin: "35px auto", padding: 20 }}></main>
   );
 }
