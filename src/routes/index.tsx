@@ -44,6 +44,25 @@ function HomePage() {
           {isLoading ? "Creating..." : "Create"}
         </button>
       </div>
+
+      {error && <p style={{ color: "crimson" }}>{error}</p>}
+
+      {result && (
+        <section>
+          <h2>Extraction result</h2>
+          <pre
+            style={{
+              background: "#111",
+              color: "#eee",
+              padding: 16,
+              overflowX: "auto",
+              borderRadius: 8,
+            }}
+          >
+            {JSON.stringify(result, null, 2)}
+          </pre>
+        </section>
+      )}
     </main>
   );
 }
