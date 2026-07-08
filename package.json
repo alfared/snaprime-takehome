@@ -12,7 +12,10 @@
 		"preview": "pnpm run build && vite preview",
 		"test": "vitest run",
 		"deploy": "pnpm run build && wrangler deploy",
-		"cf-typegen": "wrangler types"
+		"cf-typegen": "wrangler types",
+		"db:generate": "drizzle-kit generate",
+		"db:local": "wrangler d1 migrations apply snaprime-takehome-db --local",
+		"db:remote": "wrangler d1 migrations apply snaprime-takehome-db --remote"
 	},
 	"dependencies": {
 		"@cloudflare/vite-plugin": "^1.26.0",
@@ -23,10 +26,14 @@
 		"@tanstack/react-router-ssr-query": "latest",
 		"@tanstack/react-start": "latest",
 		"@tanstack/router-plugin": "^1.132.0",
+		"cheerio": "^1.2.0",
+		"drizzle-orm": "^0.45.2",
 		"lucide-react": "^0.545.0",
+		"openai": "^6.45.0",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
-		"tailwindcss": "^4.1.18"
+		"tailwindcss": "^4.1.18",
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@tailwindcss/typography": "^0.5.16",
@@ -38,6 +45,7 @@
 		"@types/react": "^19.2.0",
 		"@types/react-dom": "^19.2.0",
 		"@vitejs/plugin-react": "^6.0.1",
+		"drizzle-kit": "^0.31.10",
 		"jsdom": "^28.1.0",
 		"typescript": "^6.0.2",
 		"vite": "^8.0.0",
