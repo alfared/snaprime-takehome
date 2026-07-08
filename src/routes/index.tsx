@@ -36,7 +36,20 @@ function AdCard({
   index: number;
   onChange: (adId: string, field: keyof Ad, value: string) => void;
 }) {
+  return (
+    <article
+      style={{
+        border: "1px solid #bdb6b6",
+        borderRadius: 10,
+        padding: 25,
+      }}
+    >
+       <h3>Ad #{index + 1}</h3>
+       {ad.imageUrl && (
 
+       )}
+    </article>
+  );
 }
 
 function Field({
@@ -52,13 +65,29 @@ function Field({
 }){
   return (
     <label style={{ display: "block", marginBottom: 12 }}>
+       <strong>{label}</strong>
+
+       {textarea ? (
+        <textarea
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          rows={4}
+          style={{ width: "100%", padding: 10, marginTop: 10 }}
+        />
+       ) : (
+        <input
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          style={{ width: "100%", padding: 10, marginTop: 10 }}
+        />
+      )}
     </label>
   );
 }
 
 function HomePage() {
   const [url, setUrl] = useState("");
-  const [project, setProject] = useState<ProjectResult | null>(null);ll);
+  const [project, setProject] = useState<ProjectResult | null>(null);
   const [ads, setAds] = useState<Ad[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -79,6 +108,14 @@ function HomePage() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function updateAd(adId: string, field: keyof Ad, value: string) {
+    setAds((current) =>
+      current.map((ad) =>
+        ad.id === adId ? { ...ad, [field]: value, manuallyEdited: true } : ad,
+      ),
+    );
   }
 
   return(
@@ -115,7 +152,16 @@ function HomePage() {
 
           <section>
             <h2>Generated Ads</h2>
-            <div style={{ display: "grid", gap: 20 }}></div>
+            <div style={{ display: "grid", gap: 20 }}>
+              {ads.map((ad, index) => (
+                <AdCard 
+                  key={ad.id}
+                  ad={ad}
+                  index={index}
+                  onChange={updateAd}
+                />
+              ))}
+            </div>
           </section>
         </>
       )}
