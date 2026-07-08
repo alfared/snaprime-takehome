@@ -15,3 +15,24 @@ body {
   margin: 0;
 }
 
+.button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  margin: 0 auto;
+}
+
+.button:hover:not(:disabled) {
+  background: #1f2937;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
