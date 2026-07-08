@@ -34,6 +34,7 @@
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
 		"tailwindcss": "^4.1.18",
+		"vinxi": "^0.5.11",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
