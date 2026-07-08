@@ -25,12 +25,6 @@ export const extractUrl = createServerFn({ method: "POST" })
         const extracted = await extractWebsite(data.url, token);
         const now = new Date().toISOString();
 
-        const geminiKey = process.env.GEMINI_API_KEY;
-
-        if (!geminiKey) {
-            throw new Error("GEMINI_API_KEY is missing");
-        }
-
         const generated = await generateBrandAndAds({
             url: data.url,
             title: extracted.title,
