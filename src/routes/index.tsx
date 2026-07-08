@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { extractUrl } from "../server/extract.functions";
+import { saveAds } from "../server/save.functions"
 import type { Ad, BrandProfile } from "../lib/db/schema";
 
 export const Route = createFileRoute("/")({
@@ -39,10 +40,12 @@ function BrandProfileCard({
       <p><strong>Audience</strong> {brandProfile.targetAudience}</p>
       <p><strong>Tone:</strong> {brandProfile.toneVoice}</p>
 
-      {brandProfile.warnings?.length > 0 && (
-        <p>
-          <strong>Warnings:</strong> {brandProfile.warnings.join(", ")}
-        </p>
+      {Array.isArray(brandProfile.warnings) &&
+        brandProfile.warnings.length > 0 && (
+          <p>
+            <strong>Warnings:</strong>{" "}
+            {brandProfile.warnings.join(", ")}
+          </p>
       )}
     </section>
   );
@@ -88,6 +91,7 @@ function AdCard({
        <Field 
           label="Primary text"
           value={ad.primaryText}
+          textarea
           onChange={(value) => onChange(ad.id, "primaryText", value)}
        />
        <Field
@@ -159,6 +163,8 @@ function HomePage() {
   const [url, setUrl] = useState("");
   const [project, setProject] = useState<ProjectResult | null>(null);
   const [ads, setAds] = useState<Ad[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -178,6 +184,31 @@ function HomePage() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function save() {
+      if (!project){
+          return;
+      }
+
+      setSaving(true);
+      setSaveMessage("");
+
+      try {
+        await saveAds({
+          data: {
+            projectId: project.id,
+            ads,
+          },
+        });
+        setSaveMessage("Saved");
+      } catch (err) {
+        setSaveMessage(
+          err instanceof Error ? err.message : "Save failed",
+        );
+      } finally {
+        setSaving(false);
+      }
   }
 
   function updateAd(adId: string, field: keyof Ad, value: string) {
@@ -231,6 +262,22 @@ function HomePage() {
                   onChange={updateAd}
                 />
               ))}
+              <button
+                disabled={saving}
+                onClick={save}
+              >
+                {saving ? "Saving..." : "Save edits"}
+              </button>
+              {saveMessage && (
+                <span
+                  style={{
+                    color: saveMessage === "Saved" ? "green" : "crimson",
+                    margin: "0 auto"
+                  }}
+                >
+                  {saveMessage}
+                </span>
+              )}
             </div>
           </section>
         </>
