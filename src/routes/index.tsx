@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { extractUrl } from "../server/extract.functions";
 import { saveAds } from "../server/save.functions"
+import { regenerateAd } from "../server/regenerate.functions";
 import type { Ad, BrandProfile } from "../lib/db/schema";
 
 export const Route = createFileRoute("/")({
@@ -165,6 +166,7 @@ function HomePage() {
   const [ads, setAds] = useState<Ad[]>([]);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const [regeneratingAdId, setRegeneratingAdId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -209,6 +211,10 @@ function HomePage() {
       } finally {
         setSaving(false);
       }
+  }
+
+  async function handleRegenerate(adId: string) {
+    if (!project) return;
   }
 
   function updateAd(adId: string, field: keyof Ad, value: string) {
