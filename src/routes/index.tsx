@@ -46,8 +46,57 @@ function AdCard({
     >
        <h3>Ad #{index + 1}</h3>
        {ad.imageUrl && (
-
+         <img
+            src={ad.imageUrl}
+            alt=""
+            style={{
+              width: "100%",
+              maxHeight: 250,
+              objectFit: "cover",
+              borderRadius: 12,
+              marginBottom: 20,
+            }}
+          />
        )}
+
+       <Field 
+          label="Creative idea"
+          value={ad.creativeIdea}
+          onChange={(value) => onChange(ad.id, "creativeIdea", value)}
+       />
+       <Field 
+          label="Primary text"
+          value={ad.primaryText}
+          onChange={(value) => onChange(ad.id, "primaryText", value)}
+       />
+       <Field
+          label="Headline"
+          value={ad.headline}
+          onChange={(value) => onChange(ad.id, "headline", value)}
+       />
+
+       <Field
+          label="Description"
+          value={ad.description}
+          textarea
+          onChange={(value) => onChange(ad.id, "description", value)}
+       />
+
+       <Field
+         label="CTA"
+         value={ad.cta}
+         onChange={(value) => onChange(ad.id, "cta", value)}
+       />
+
+       <Field
+         label="Image URL"
+         value={ad.imageUrl ?? ""}
+         onChange={(value) => onChange(ad.id, "imageUrl", value)}
+       />
+
+        {ad.manuallyEdited && (
+          <p style={{ fontSize: 13, color: "rgb(85, 50, 85)" }}>Edited locally</p>
+         )}
     </article>
   );
 }
