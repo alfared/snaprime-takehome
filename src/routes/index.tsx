@@ -129,6 +129,7 @@ function AdCard({
          )}
         
         <button
+          className="button"
           onClick={() => onRegenerate(ad.id)}
           disabled={isRegenerating}
         >
@@ -266,7 +267,7 @@ function HomePage() {
           style={{ flex: 1, padding: 12 }}
         />
 
-        <button onClick={handleCreate} disabled={isLoading || !url}>
+        <button className="button" onClick={handleCreate} disabled={isLoading || !url}>
           {isLoading ? "Creating..." : "Create"}
         </button>
       </div>
@@ -300,6 +301,7 @@ function HomePage() {
                 />
               ))}
               <button
+                className="button"
                 disabled={saving}
                 onClick={save}
               >
