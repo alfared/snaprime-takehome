@@ -29,6 +29,21 @@ function HomePage() {
   }
 
   return(
-    <main style={{ maxWidth: 900, margin: "35px auto", padding: 20 }}></main>
+    <main style={{ maxWidth: 900, margin: "35px auto", padding: 20 }}>
+      <h1>Ad Generator Test Task</h1>
+
+     <div style={{ display: "flex", gap: 10, marginBottom: 24 }}>
+        <input
+          value={url}
+          onChange={(event) => setUrl(event.target.value)}
+          placeholder="https://www.snaprime.com"
+          style={{ flex: 1, padding: 12 }}
+        />
+
+        <button onClick={handleCreate} disabled={isLoading || !url}>
+          {isLoading ? "Creating..." : "Create"}
+        </button>
+      </div>
+    </main>
   );
 }
