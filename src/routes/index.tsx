@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { extractUrl } from "../server/extract.functions";
 import { saveAds } from "../server/save.functions"
+import { regenerateAd } from "../server/regenerate.functions";
 import type { Ad, BrandProfile } from "../lib/db/schema";
 
 export const Route = createFileRoute("/")({
@@ -55,10 +56,14 @@ function AdCard({
   ad,
   index,
   onChange,
+  onRegenerate,
+  isRegenerating,
 }: {
   ad: Ad;
   index: number;
   onChange: (adId: string, field: keyof Ad, value: string) => void;
+  onRegenerate: (adId: string) => void;
+  isRegenerating: boolean;
 }) {
   return (
     <article
@@ -122,6 +127,13 @@ function AdCard({
         {ad.manuallyEdited && (
           <p style={{ fontSize: 13, color: "rgb(85, 50, 85)" }}>Edited locally</p>
          )}
+        
+        <button
+          onClick={() => onRegenerate(ad.id)}
+          disabled={isRegenerating}
+        >
+          {isRegenerating ? "Regenerating..." : "Regenerate this ad"}
+        </button>
     </article>
   );
 }
@@ -165,6 +177,7 @@ function HomePage() {
   const [ads, setAds] = useState<Ad[]>([]);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const [regeneratingAdId, setRegeneratingAdId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -208,6 +221,28 @@ function HomePage() {
         );
       } finally {
         setSaving(false);
+      }
+  }
+
+  async function regenerate(adId: string) {
+      if (!project) return;
+
+      setRegeneratingAdId(adId);
+
+      try {
+        const newAd = await regenerateAd({
+          data: {
+            projectId: project.id,
+            adId,
+          },
+        });
+
+        setAds((current) =>
+          current.map((ad) => (ad.id === adId ? newAd as Ad : ad)),
+        );
+
+      } finally {
+         setRegeneratingAdId(null);
       }
   }
 
@@ -260,6 +295,8 @@ function HomePage() {
                   ad={ad}
                   index={index}
                   onChange={updateAd}
+                  onRegenerate={regenerate}
+                  isRegenerating={regeneratingAdId === ad.id}
                 />
               ))}
               <button
