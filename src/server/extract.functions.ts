@@ -1,5 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
+import { env } from "cloudflare:workers";
 import { z } from "zod";
+import { nanoid } from "nanoid";
+import { createDb } from "../lib/db";
+import { projects } from "../lib/db/schema";
 import { extractWebsite } from "../lib/extract/browserless";
 
 const schema = z.object({
@@ -15,5 +19,27 @@ export const extractUrl = createServerFn({ method: "POST" })
             throw new Error("BROWSERLESS_TOKEN is missing");
         }
 
-        return extractWebsite(data.url, token);
+        const db = createDb(env.DB);
+
+        const extracted = await extractWebsite(data.url, token);
+        const now = new Date().toISOString();
+
+
+        const project ={
+            id: nanoid(),
+            inputUrl: data.url,
+            status: extracted.status,
+            error: extracted.status === "failed" ? extracted.warnings.join("\n") : null,
+            extractedText: extracted.text,
+            images: extracted.images,
+            brandProfile: null,
+            ads: [],
+            latencyMs: extracted.latencyMs,
+            createdAt: now,
+            updatedAt: now,
+        }
+
+        await db.insert(projects).values(project);
+
+        return project;
     });

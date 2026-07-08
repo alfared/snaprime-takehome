@@ -29,10 +29,12 @@
 		"cheerio": "^1.2.0",
 		"drizzle-orm": "^0.45.2",
 		"lucide-react": "^0.545.0",
+		"nanoid": "^5.1.16",
 		"openai": "^6.45.0",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
 		"tailwindcss": "^4.1.18",
+		"vinxi": "^0.5.11",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {

@@ -3,6 +3,11 @@ import * as cheerio from "cheerio";
 export function parseHtml(url: string, html: string) {
   const $ = cheerio.load(html);
 
+  $("script").remove();
+  $("style").remove();
+  $("noscript").remove();
+  $("svg").remove()
+
   return {
     url,
     title: $("title").text(),
@@ -26,7 +31,9 @@ export function parseHtml(url: string, html: string) {
       .map((_, el) => $(el).attr("src"))
       .get()
       .filter(Boolean)
-      .map((src) => new URL(src!, url).href),
+      .map((src) => new URL(src!, url).href)
+      .filter((src) => !src.startsWith("data:"))
+      .slice(0, 10),
 
     colors: [],
 
