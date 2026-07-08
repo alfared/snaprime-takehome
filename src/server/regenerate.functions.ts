@@ -23,6 +23,13 @@ export const regenerateAd = createServerFn({ method: "POST" })
             where: eq(projects.id, data.projectId),
         });
 
+        if (!project) {
+            throw new Error("Project not found");
+        }
+
+        const ads = project.ads ?? [];
+        const targetAd = ads.find((ad) => ad.id === data.adId);
+
         const generated = await generateBrandAndAds({
             url: project.inputUrl,
             title: "",
@@ -32,4 +39,33 @@ export const regenerateAd = createServerFn({ method: "POST" })
         });
 
         const newAd = generated.ads[0];
+        const availableImages = project.images ?? [];
+        const currentImageIndex = availableImages.findIndex(
+         (image) => image === targetAd.imageUrl,
+        );
+        const nextImage =
+            availableImages.length > 0
+                ? availableImages[(currentImageIndex + 1) % availableImages.length]
+                : targetAd.imageUrl;
+
+        const updatedAd: Ad = {
+            ...newAd,
+            id: data.adId,
+            imageUrl: nextImage ?? null,
+            manuallyEdited: false,
+        };
+
+        const updatedAds = ads.map((ad) =>
+            ad.id === data.adId ? updatedAd : ad,
+        );
+
+        await db
+            .update(projects)
+            .set({
+                ads: updatedAds,
+                updatedAt: new Date().toISOString(),
+            })
+            .where(eq(projects.id, data.projectId));
+
+        return updatedAd;
     });

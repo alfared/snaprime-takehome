@@ -56,10 +56,14 @@ function AdCard({
   ad,
   index,
   onChange,
+  onRegenerate,
+  isRegenerating,
 }: {
   ad: Ad;
   index: number;
   onChange: (adId: string, field: keyof Ad, value: string) => void;
+  onRegenerate: (adId: string) => void;
+  isRegenerating: boolean;
 }) {
   return (
     <article
@@ -123,6 +127,13 @@ function AdCard({
         {ad.manuallyEdited && (
           <p style={{ fontSize: 13, color: "rgb(85, 50, 85)" }}>Edited locally</p>
          )}
+        
+        <button
+          onClick={() => onRegenerate(ad.id)}
+          disabled={isRegenerating}
+        >
+          {isRegenerating ? "Regenerating..." : "Regenerate this ad"}
+        </button>
     </article>
   );
 }
@@ -213,8 +224,26 @@ function HomePage() {
       }
   }
 
-  async function handleRegenerate(adId: string) {
-    if (!project) return;
+  async function regenerate(adId: string) {
+      if (!project) return;
+
+      setRegeneratingAdId(adId);
+
+      try {
+        const newAd = await regenerateAd({
+          data: {
+            projectId: project.id,
+            adId,
+          },
+        });
+
+        setAds((current) =>
+          current.map((ad) => (ad.id === adId ? newAd as Ad : ad)),
+        );
+
+      } finally {
+         setRegeneratingAdId(null);
+      }
   }
 
   function updateAd(adId: string, field: keyof Ad, value: string) {
@@ -266,6 +295,8 @@ function HomePage() {
                   ad={ad}
                   index={index}
                   onChange={updateAd}
+                  onRegenerate={regenerate}
+                  isRegenerating={regeneratingAdId === ad.id}
                 />
               ))}
               <button
