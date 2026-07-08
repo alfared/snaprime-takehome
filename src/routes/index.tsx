@@ -24,7 +24,7 @@ function BrandProfileCard({
 }: {
   brandProfile: BrandProfile;
 }) {
-  
+
 }
 
 function AdCard({
@@ -101,7 +101,23 @@ function HomePage() {
       {error && <p style={{ color: "crimson" }}>{error}</p>}
 
       {project && (
+        <>
+          <section>
+            <p>
+              <strong>Status:</strong> {project.status} ·{" "}
+            </p>
+            {project.error && <p style={{ color: "crimson"}}>{project.error}</p>}
+          </section>
 
+          {project.brandProfile && (
+            <BrandProfileCard brandProfile={project.brandProfile}/>
+          )}
+
+          <section>
+            <h2>Generated Ads</h2>
+            <div style={{ display: "grid", gap: 20 }}></div>
+          </section>
+        </>
       )}
     </main>
   );
