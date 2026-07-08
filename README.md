@@ -33,8 +33,7 @@ The application extracts website content using Browserless (Playwright) to suppo
 
 ## AI Usage
 
-I used ChatGPT during development for implementation support, architecture discussions, debugging, and prompt refinement. The application itself uses **OpenAI GPT-4.1 mini** for Brand Profile and ad generation.
-
+The application itself uses **OpenAI GPT-4.1 mini** for Brand Profile and ad generation.
 All AI-generated suggestions were reviewed, adapted, and integrated manually.
 
 ## Key Decisions
