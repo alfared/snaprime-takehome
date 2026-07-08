@@ -1,5 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { nanoid } from "nanoid";
+import { createDb } from "../lib/db";
+import { projects } from "../lib/db/schema";
 import { extractWebsite } from "../lib/extract/browserless";
 
 const schema = z.object({
@@ -15,5 +18,16 @@ export const extractUrl = createServerFn({ method: "POST" })
             throw new Error("BROWSERLESS_TOKEN is missing");
         }
 
-        return extractWebsite(data.url, token);
+        const extracted =  extractWebsite(data.url, token);
+        const now = new Date().toISOString();
+
+        const db = createDb(process.env.DB as unknown as D1Database);
+
+        const project ={
+            id: nanoid()
+        }
+
+        await db.insert(projects).values(project);
+
+        return project;
     });
