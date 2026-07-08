@@ -54,6 +54,12 @@ export async function generateBrandAndAds(
     ads: (parsed.ads ?? []).map((ad: any) => ({
       id: nanoid(),
       creativeIdea: ad.creativeIdea ?? "",
+      primaryText: ad.primaryText ?? "",
+      headline: ad.headline ?? "",
+      description: ad.description ?? "",
+      cta: ad.cta ?? "Learn more",
+      imageUrl: ad.imageUrl || null,
+      manuallyEdited: false,
     })),
   };
 }

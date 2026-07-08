@@ -15,4 +15,50 @@ export function buildPrompt(input: {
   description: string;
   text: string;
   images: string[];
-}) {}
+}) {
+  return `
+Website URL:
+${input.url}
+
+Title:
+${input.title}
+
+Description:
+${input.description}
+
+Candidate Images:
+${input.images.join("\n")}
+
+Website Text:
+${input.text}
+
+Generate:
+
+1. Brand Profile
+2. Between 1 and 3 ads.
+
+Return ONLY JSON.
+
+{
+  "brandProfile": {
+    "whatClientDoes": "",
+    "targetAudience": "",
+    "mainValueProposition": "",
+    "toneVoice": "",
+    "colorPalette": [],
+    "candidateImages": [],
+    "warnings": []
+  },
+  "ads": [
+    {
+      "creativeIdea": "",
+      "primaryText": "",
+      "headline": "",
+      "description": "",
+      "cta": "",
+      "imageUrl": ""
+    }
+  ]
+}
+`;
+}

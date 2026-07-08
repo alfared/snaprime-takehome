@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { createDb } from "../lib/db";
 import { projects } from "../lib/db/schema";
 import { extractWebsite } from "../lib/extract/browserless";
-import { generateBrandAndAds } from "../lib/ai/generateAds";
+import { generateBrandAndAds } from "../lib/ai/generateBrandAndAds";
 
 const schema = z.object({
     url: z.string().url(),
