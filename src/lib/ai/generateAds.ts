@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { nanoid } from "nanoid";
 import type { BrandProfile, Ad } from "../db/schema";
+import { SYSTEM_PROMPT, buildPrompt } from "./prompts";
 
 type GenerateInput = {
   url: string;
@@ -20,10 +21,18 @@ export async function generateBrandAndAds(
   brandProfile: BrandProfile;
   ads: Ad[];
 }> {
-  const prompt = ``;
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: prompt,
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            text: `${SYSTEM_PROMPT}\n\n${buildPrompt(input)}`,
+          },
+        ],
+      },
+    ],
   });
 
   const text = response.text;
@@ -31,4 +40,20 @@ export async function generateBrandAndAds(
   if (!text) {
     throw new Error("Gemini returned empty response");
   }
+
+  const cleaned = text
+    .replace(/^```json/, "")
+    .replace(/^```/, "")
+    .replace(/```$/, "")
+    .trim();
+
+  const parsed = JSON.parse(cleaned);
+
+  return {
+    brandProfile: parsed.brandProfile,
+    ads: (parsed.ads ?? []).map((ad: any) => ({
+      id: nanoid(),
+      creativeIdea: ad.creativeIdea ?? "",
+    })),
+  };
 }

@@ -31,12 +31,13 @@ export const extractUrl = createServerFn({ method: "POST" })
             throw new Error("GEMINI_API_KEY is missing");
         }
 
-        const generated = await generateBrandAndAds(
-            {
-                url: data.url
-            }, 
-            geminiKey
-        );
+        const generated = await generateBrandAndAds({
+            url: data.url,
+            title: extracted.title,
+            description: extracted.description,
+            text: extracted.text,
+            images: extracted.images,
+        });
 
         const project ={
             id: nanoid(),
