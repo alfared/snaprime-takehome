@@ -18,7 +18,8 @@
 		{
 			"binding": "DB",
 			"database_name": "snaprime-takehome-db",
-			"database_id": "d79a45d9-7e37-4b22-9121-92d4ee821aab"
+			"database_id": "d79a45d9-7e37-4b22-9121-92d4ee821aab",
+			"migrations_dir": "drizzle"
 		}
 	]
 	/**
