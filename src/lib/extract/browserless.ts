@@ -36,6 +36,19 @@ export async function extractWebsite(url: string, token: string) {
 
     try {
       const page = await extractWithBrowserless(url, token);
+
+      return {
+        ...page,
+        latencyMs: Date.now() - startedAt,
+        status: page.text.length > 200 ? "ready" : "partial",
+        warnings:
+            page.text.length > 200
+                ? page.warnings
+                : [
+                    ...page.warnings,
+                    "Rendered page contained very little readable text.",
+                  ]
+      }
     } catch (error) {
         return {
             url,
