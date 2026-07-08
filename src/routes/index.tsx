@@ -19,9 +19,46 @@ type ProjectResult ={
   latencyMs: number;
 };
 
+function BrandProfileCard({
+  brandProfile,
+}: {
+  brandProfile: BrandProfile;
+}) {
+  
+}
+
+function AdCard({
+  ad,
+  index,
+  onChange,
+}: {
+  ad: Ad;
+  index: number;
+  onChange: (adId: string, field: keyof Ad, value: string) => void;
+}) {
+
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+  textarea = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  textarea?: boolean;
+}){
+  return (
+    <label style={{ display: "block", marginBottom: 12 }}>
+    </label>
+  );
+}
+
 function HomePage() {
   const [url, setUrl] = useState("");
-  const [result, setResult] = useState<any>(null);
+  const [project, setProject] = useState<ProjectResult | null>(null);ll);
   const [ads, setAds] = useState<Ad[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,12 +67,13 @@ function HomePage() {
 
     setIsLoading(true);
     setError("");
-    setResult(null);
+    setProject(null);
     setAds([]);
 
     try {
-      const data = await extractUrl({ data: { url } });
-      setResult(data);
+      const result = await extractUrl({ data: { url } });
+      setProject(result as ProjectResult);
+      setAds((result as ProjectResult).ads ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -62,21 +100,8 @@ function HomePage() {
 
       {error && <p style={{ color: "crimson" }}>{error}</p>}
 
-      {result && (
-        <section>
-          <h2>Extraction result</h2>
-          <pre
-            style={{
-              background: "#111",
-              color: "#eee",
-              padding: 16,
-              overflowX: "auto",
-              borderRadius: 8,
-            }}
-          >
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        </section>
+      {project && (
+
       )}
     </main>
   );
